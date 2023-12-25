@@ -1,0 +1,122 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                                         RsiColoredCandles |
+//|                                              https://forexroboteasy.com |
+//|                                                       Forex Robot Easy Team |
+//+------------------------------------------------------------------+
+#property strict
+
+// Indicator input parameters
+input int rsiPeriod = 14;
+input int overboughtLevel = 70;
+input int oversoldLevel = 30;
+
+//+------------------------------------------------------------------+
+//| Custom indicator initialization function                         |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+   // Define indicator buffers
+   IndicatorBuffers(1);
+   
+   // Set buffer to store RSI values
+   SetIndexBuffer(0, rsiBuffer, INDICATOR_DATA);
+   
+   // Set indicator label
+   IndicatorShortName('RsiColoredCandles');
+   
+   return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//| Custom indicator iteration function                              |
+//+------------------------------------------------------------------+
+int OnCalculate(const int rates_total,
+                const int prev_calculated,
+                const datetime &time[],
+                const double &open[],
+                const double &high[],
+                const double &low[],
+                const double &close[],
+                const long &tick_volume[],
+                const long &volume[],
+                const int &spread[])
+{
+   // Calculate RSI
+   ArraySetAsSeries(rsiBuffer, true);
+   ArraySetAsSeries(close, true);
+   double rsiValues[];
+   int rsiCount = iRSI(_Symbol, _Period, rsiPeriod, PRICE_CLOSE, rsiValues);
+   
+   // Clear chart
+   ChartIndicatorDelete(0, 0);
+   
+   // Draw candles with RSI color scheme
+   for(int i = prev_calculated; i < rates_total; i++)
+   {
+      if(rsiValues[i] >= overboughtLevel)
+      {
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+      }
+      else if(rsiValues[i] <= oversoldLevel)
+      {
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+         ChartSetSymbolPeriod(0, _Symbol, _Period);
+      }
+   }
+   
+   // Recommend buying or selling based on candle color
+   if(rsiValues[rates_total-1] >= overboughtLevel)
+   {
+      Print('Recommendation: SELL');
+   }
+   else if(rsiValues[rates_total-1] <= oversoldLevel)
+   {
+      Print('Recommendation: BUY');
+   }
+   
+   return(rates_total);
+}
